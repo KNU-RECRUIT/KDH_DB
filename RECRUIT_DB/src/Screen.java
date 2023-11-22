@@ -30,49 +30,9 @@ public class Screen {
         this.departmentName = department_name;
     }
 
-    public static void title2() {
-        // https://patorjk.com/software/taag/#p=display&f=Graffiti&t=RECRUIT
-        System.out.println(
-                "__________ ___________ _________ __________ ____ ___ .___ ___________\n" +
-                        "\\______ \\ \\_ _____/ \\_ ___ \\ \\______ \\ | | \\ | | \\__ ___/\n" +
-                        " | _/ | __)_ / \\ \\/ | _/ | | / | | | | \n" +
-                        " | | \\ | \\ \\ \\____ | | \\ | | / | | | | \n" +
-                        " |____|_ / /_______ / \\______ / |____|_ / |______/ |___| |____| \n" +
-                        " \\/ \\/ \\/ \\/ \n" +
-                        "----------------------------------------------------------------------------\n");
-    }
-
-    public static void title() {
-        // error occurs... why?
-        // https://patorjk.com/software/taag/#p=display&f=Graffiti&t=RECRUIT
-        System.out.println(
-        "__________ ___________ _________ __________ ____ ___ .___ ___________\n" +
-        "\\______ \\ \\_ _____/ \\_ ___ \\ \\______ \\ | | \\ | | \\__ ___/\n" +
-        " | _/ | __)_ / \\ \\/ | _/ | | / | | | | \n" +
-        " | | \\ | \\ \\ \\____ | | \\ | | / | | | | \n" +
-        " |____|_ / /_______ / \\______ / |____|_ / |______/ |___| |____| \n" +
-        " \\/ \\/ \\/ \\/ \n" +
-        "----------------------------------------------------------------------------\n");
-        // System.out.println("RECRUIT");
-    }
-
-    public static void resetConsole() {
-        int OS = getOSInfo();
-        try {
-            if (OS == WIN)
-                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-            else if (OS == UNIX)
-                new ProcessBuilder("/bin/bash", "-c", "clear").inheritIO().start().waitFor();
-
-            // System.out.println("Successfully cleared screen");
-        } catch (Exception e) {
-            System.err.println("Failed to control screen!\n" + e);
-            System.exit(1);
-        }
-    }
 
     public void menu() {
-        resetConsole();
+        // resetConsole();
 
         System.out.println("작업 유형을 선택해주세요.\n");
         // "1. 고객 관리\n" +

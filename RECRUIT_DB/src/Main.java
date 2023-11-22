@@ -36,8 +36,6 @@ public class Main {
             System.exit(1);
         }
 
-        Screen.title();
-
         // login
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter your ID: ");
