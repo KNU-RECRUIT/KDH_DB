@@ -256,6 +256,56 @@ public class test {
                 }
                 break;
             }
+            case 2: {
+
+                try {
+                    System.out.println("Please select option: (Earliest or Latest)");
+                    System.out.println("1. Earliest");
+                    System.out.println("2. Latest");
+                    int elopt = sc.nextInt();
+                    String elparam;
+
+                    if(elopt==1)
+                    {
+                        elparam = "MIN";
+                    }
+                    else if(elopt==2)
+                    {
+                        elparam = "MAX";
+                    }
+                    else{
+                        System.err.println("Wrong Option!");
+                        break;
+                    }
+                    String SQLT="SELECT NAME, GENDER, EMAIL, ID FROM CUSTOMER_INFO WHERE ID IN (SELECT AUTHOR_ID FROM USER_POST_INFO WHERE START_DATE = (SELECT "+elparam+"(START_DATE) FROM USER_POST_INFO)) ORDER BY NAME ASC, ID ASC, GENDER DESC";
+
+                    stmt = conn.createStatement();
+                    rs = stmt.executeQuery(SQLT);
+                    System.out.printf("Name| Gender|Email|ID\n");
+                    System.out.println("=====================");
+                    while (rs.next()) {
+                        String CNAME = rs.getString(1);
+                        String Gender = rs.getString(2);
+                        String Email = rs.getString(3);
+                        String EID = rs.getString(4);
+
+
+                        System.out.print(CNAME);
+                        System.out.print("|");
+                        System.out.print(Gender);
+                        System.out.print("|");
+                        System.out.print(Email);
+                        System.out.println("|");
+                        System.out.print(EID);
+                        System.out.println("|");
+                        System.out.println("=====================");
+                    }
+                } catch (SQLException e) {
+                    System.out.println("Error: " + e.getMessage());
+                    System.exit(1);
+                }
+                break;
+            }
 
 
         }

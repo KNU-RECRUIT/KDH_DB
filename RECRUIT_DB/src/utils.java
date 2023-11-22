@@ -105,7 +105,7 @@ public class utils {
             System.out.println("");
             System.out.println("select option : ");
             System.out.println("1. Search the user who posted the most and the least.");
-            System.out.println("2. Q2");
+            System.out.println("2. Search the earliest posted and latest posted user.");
             System.out.println("3. Q3");
             System.out.println("4. exit program");
             System.out.printf(">_ ");
