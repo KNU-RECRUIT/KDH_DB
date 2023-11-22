@@ -1,4 +1,5 @@
 import java.sql.*;
+import java.sql.Date;
 import java.util.*;
 
 public class test {
@@ -25,13 +26,14 @@ public class test {
         logIn(sc);
 
         int menu = utils.menu(OS, sc);
-        menuCall(menu);
+        menuCall(menu, sc);
 
         closeConnection(conn, stmt);
+        sc.close();
     }
 
     // load menu based on user selection
-    public static void menuCall(int menu) {
+    public static void menuCall(int menu, Scanner sc) {
         switch (menu) {
             case 1: {
                 System.out.println("customer management selected");
@@ -40,7 +42,7 @@ public class test {
             }
             case 2: {
                 System.out.println("announcement management selected");
-                announcementManagement(conn, stmt);
+                announcementManagement(conn, stmt, sc);
                 break;
             }
             case 3: {
@@ -63,70 +65,51 @@ public class test {
         }
     }
 
-    public static void customerManagement(Connection conn, Statement stmt){
+    public static void customerManagement(Connection conn, Statement stmt) {
         // System.out.println("customerManagement works!");
     }
 
-    public static void announcementManagement(Connection conn, Statement stmt){
-        // System.out.println("announcementManagement works@");
-        boolean announcementMenuLoop = true;
-        int ann_menu = 0;
-        Scanner sc = new Scanner(System.in);
-        String sql = null;
-        while(announcementMenuLoop) {
-            stmt = null;
-            rs = null;
-            System.out.println("[메뉴 선택]");
-            System.out.println("1. 현재 ID의 전체 게시글 검색");
-            System.out.println("2. 게시글을 올린 직원 중 부서장급 직책의 직원을 조건에 따라 검색");
-            System.out.println("3. 프로그램 종료");
-            System.out.print("> ");
-            ann_menu = sc.nextInt();
-            if(1> ann_menu || ann_menu > 3){
-                System.out.println("Wrong selection. Please Try again!");
-                continue;
-            }
-            if(ann_menu==1)
-            {
-                sql = "SELECT * FROM POST_INFO WHERE POST_ID IN (SELECT POST_ID FROM ANNOUNCEMENT_INFO WHERE MANAGER_ID = '"+ID+"') AND TYPE = 'A'";
+    public static void announcementManagement(Connection conn, Statement stmt, Scanner sc) {
+        int option = utils.queryOption2(OS, sc);
+        String SQL2 = "";
+        sc.nextLine(); // flsuh buffer
+        switch (option) {
+            case 1: {
+                String MANAGER_ID = sc.nextLine();
+                SQL2 = "SELECT * "
+                        + "FROM POST_INFO "
+                        + "WHERE POST_ID IN "
+                        + "(SELECT POST_ID "
+                        + "FROM ANNOUNCEMENT_INFO "
+                        + "WHERE MANAGER_ID = '" + MANAGER_ID + "') AND TYPE = 'A'";
 
-                // check if the user exists
                 try {
                     stmt = conn.createStatement();
-                    rs = stmt.executeQuery(sql);
-                    if (!rs.next()) {
-                        System.out.println("인증에 실패하였습니다. 프로그램을 종료합니다.");
-                        System.exit(1);
-                    }
-                    else {
-                        System.out.printf("%-12s|%-10s|%-10s|%-5s|\n", "POST ID", "Posted", "Updated", "Views");
-                        System.out.println("------------+----------+----------+-----|");
-                        while(rs.next())
-                        {
-                            String postID = rs.getString(1);
-                            java.util.Date postedDate = rs.getDate(2);
-                            java.util.Date updateDate = rs.getDate(3);
-                            int views = rs.getInt(4);
+                    rs = stmt.executeQuery(SQL2);
+                    System.out.printf("%-12s|%-10s|%-10s|%-5s|\n", "POST ID", "Posted", "Updated", "Views");
+                    System.out.println("------------+----------+----------+-----|");
+                    while (rs.next()) {
+                        String postID = rs.getString(1);
+                        Date postedDate = rs.getDate(2);
+                        Date updateDate = rs.getDate(3);
+                        int views = rs.getInt(4);
 
-
-                            System.out.print(postID);
-                            System.out.print("|");
-                            System.out.print(postedDate);
-                            System.out.print("|");
-                            System.out.print(updateDate);
-                            System.out.print("|");
-                            System.out.print(views);
-                            System.out.println("|");
-
-                        }
-                        System.out.println("------------+----------+----------+-----|");
+                        System.out.print(postID);
+                        System.out.print("|");
+                        System.out.print(postedDate);
+                        System.out.print("|");
+                        System.out.print(updateDate);
+                        System.out.print("|");
+                        System.out.printf("%5d", views);
+                        System.out.println("|");
                     }
                 } catch (SQLException e) {
                     System.out.println("Error: " + e.getMessage());
                     System.exit(1);
                 }
+                break;
             }
-            else if(ann_menu==2) {
+            case 2: {
                 System.out.println("=====[공지를 관리할 수 있는 부서 관리자급 직원 검색]=====");
                 System.out.println("=검색 옵션 선택=");
                 System.out.println("1. 이름으로 검색");
@@ -138,23 +121,23 @@ public class test {
                 {
                     System.out.print("직원 이름 입력: ");
                     String a2_name = sc.next();
-                    sql = "SELECT DISTINCT E.NAME, D.CONTACT, D.DEPARTMENT_ID FROM EMPLOYEE_INFO E, DEPARTMENT_INFO D, ANNOUNCEMENT_INFO A WHERE E.ID = D.HEAD_ID AND A.MANAGER_ID = E.ID AND E.NAME='"+a2_name+"'";
+                    SQL2 = "SELECT DISTINCT E.NAME, D.CONTACT, D.DEPARTMENT_ID FROM EMPLOYEE_INFO E, DEPARTMENT_INFO D, ANNOUNCEMENT_INFO A WHERE E.ID = D.HEAD_ID AND A.MANAGER_ID = E.ID AND E.NAME='"+a2_name+"'";
                 }
                 else if(a2_option==2)
                 {
                     System.out.print("직원 부서 입력: ");
                     String a2_id = sc.next();
-                    sql = "SELECT DISTINCT E.NAME, D.CONTACT, D.DEPARTMENT_ID FROM EMPLOYEE_INFO E, DEPARTMENT_INFO D, ANNOUNCEMENT_INFO A WHERE E.ID = D.HEAD_ID AND A.MANAGER_ID = E.ID AND D.DEPARTMENT_ID='"+a2_id+"'";
+                    SQL2 = "SELECT DISTINCT E.NAME, D.CONTACT, D.DEPARTMENT_ID FROM EMPLOYEE_INFO E, DEPARTMENT_INFO D, ANNOUNCEMENT_INFO A WHERE E.ID = D.HEAD_ID AND A.MANAGER_ID = E.ID AND D.DEPARTMENT_ID='"+a2_id+"'";
                 }
                 else if(a2_option==3)
                 {
-                    sql = "SELECT DISTINCT E.NAME, D.CONTACT, D.DEPARTMENT_ID FROM EMPLOYEE_INFO E, DEPARTMENT_INFO D, ANNOUNCEMENT_INFO A WHERE E.ID = D.HEAD_ID AND A.MANAGER_ID = E.ID";
+                    SQL2 = "SELECT DISTINCT E.NAME, D.CONTACT, D.DEPARTMENT_ID FROM EMPLOYEE_INFO E, DEPARTMENT_INFO D, ANNOUNCEMENT_INFO A WHERE E.ID = D.HEAD_ID AND A.MANAGER_ID = E.ID";
                 }
 
                 // check if the user exists
                 try {
                     stmt = conn.createStatement();
-                    rs = stmt.executeQuery(sql);
+                    rs = stmt.executeQuery(SQL2);
                         System.out.printf("%-4s|%-10s|%-4s|\n","이름", "전화번호(Phone)", "부서");
                         System.out.println("=========================");
 
@@ -177,16 +160,26 @@ public class test {
                     System.out.println("Error: " + e.getMessage());
                     System.exit(1);
                 }
+                break;
             }
-            else if(ann_menu==3)
-            {
-                announcementMenuLoop = false;
+            case 3: {
+                break;
+            }
+            case 4: {
+                System.out.println("exit program");
+                System.exit(0);
+                break;
+            }
+            default: {
+                System.err.println("Wrong option!");
+                System.exit(1);
+                break;
             }
         }
 
     }
 
-    public static void userPostManagement(Connection conn, Statement stmt){
+    public static void userPostManagement(Connection conn, Statement stmt) {
         // System.out.println("userPostManagement works#");
     }
 
@@ -206,9 +199,11 @@ public class test {
     // input user ID and name to log in
     public static void inputAccount(Scanner sc) {
         System.out.printf("Input your ID : ");
-        ID = sc.nextLine();
+        // ID = sc.nextLine();
+        ID = "UC7358";
         System.out.printf("Input your name : ");
-        name = sc.nextLine();
+        // name = sc.nextLine();
+        name = "김명석";
     }
 
     // verify if ID and name is valid
@@ -219,8 +214,8 @@ public class test {
         try {
             // SQL = "SELECT * FROM EMPLOYEE_INFO";
             SQL = "SELECT * "
-            + "FROM EMPLOYEE_INFO "
-            + "WHERE ID = '" + ID + "' AND NAME = '" + name + "'";
+                    + "FROM EMPLOYEE_INFO "
+                    + "WHERE ID = '" + ID + "' AND NAME = '" + name + "'";
             stmt = conn.createStatement();
             rs = stmt.executeQuery(SQL);
             if (!rs.next()) {
@@ -230,9 +225,6 @@ public class test {
             } else {
                 departmentID = rs.getString(4);
                 System.out.println("Welcome " + name + "!");
-                // System.out.println("Welcome My master!");
-
-                // Thread.sleep(3000);
 
                 SQL = "SELECT NAME FROM DEPARTMENT_INFO " + "WHERE DEPARTMENT_ID = '" + departmentID + "'";
                 stmt = conn.createStatement();
