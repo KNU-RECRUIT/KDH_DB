@@ -306,6 +306,57 @@ public class test {
                 }
                 break;
             }
+            case 3: {
+
+                try {
+                    System.out.println("Please select option: (Earliest or Latest)");
+                    System.out.println("1. Earliest");
+                    System.out.println("2. Latest");
+                    int qiopt = sc.nextInt();
+                    String qiparam;
+
+                    if(qiopt==1)
+                    {
+                        qiparam = "ASC";
+                    }
+                    else if(qiopt==2)
+                    {
+                        qiparam = "DESC";
+                    }
+                    else{
+                        System.err.println("Wrong Option!");
+                        break;
+                    }
+                    String SQLK="SELECT STATUS, POST_ID, LASTLY_UPDATED FROM (SELECT U.STATUS, P.POST_ID, P.LASTLY_UPDATED, ROW_NUMBER() OVER(PARTITION BY U.STATUS ORDER BY P.LASTLY_UPDATED "+qiparam+") AS RN FROM USER_POST_INFO U JOIN POST_INFO P ON U.POST_ID = P.POST_ID) WHERE RN = 1";
+
+                    stmt = conn.createStatement();
+                    rs = stmt.executeQuery(SQLK);
+                    System.out.printf("Name| Gender|Email|ID\n");
+                    System.out.println("=====================");
+                    while (rs.next()) {
+                        String CNAME = rs.getString(1);
+                        String Gender = rs.getString(2);
+                        String Email = rs.getString(3);
+                        String EID = rs.getString(4);
+
+
+                        System.out.print(CNAME);
+                        System.out.print("|");
+                        System.out.print(Gender);
+                        System.out.print("|");
+                        System.out.print(Email);
+                        System.out.println("|");
+                        System.out.print(EID);
+                        System.out.println("|");
+                        System.out.println("=====================");
+                    }
+                } catch (SQLException e) {
+                    System.out.println("Error: " + e.getMessage());
+                    System.exit(1);
+                }
+                break;
+
+            }
 
 
         }
