@@ -69,6 +69,45 @@ public class test {
 
     public static void announcementManagement(Connection conn, Statement stmt){
         // System.out.println("announcementManagement works@");
+        String sql = "SELECT * FROM POST_INFO WHERE POST_ID IN (SELECT POST_ID FROM ANNOUNCEMENT_INFO WHERE MANAGER_ID = '"+ID+"') AND TYPE = 'A'";
+
+        // check if the user exists
+        try {
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(sql);
+            if (!rs.next()) {
+                System.out.println("인증에 실패하였습니다. 프로그램을 종료합니다.");
+                System.exit(1);
+            }
+            else {
+                System.out.printf("%-12s|%-10s|%-10s|%-5s|\n", "POST ID", "Posted", "Updated", "Views");
+                System.out.println("------------+----------+----------+-----|");
+                while(rs.next())
+                {
+                    String postID = rs.getString(1);
+                    java.util.Date postedDate = rs.getDate(2);
+                    java.util.Date updateDate = rs.getDate(3);
+                    int views = rs.getInt(4);
+
+
+                    System.out.print(postID);
+                    System.out.print("|");
+                    System.out.print(postedDate);
+                    System.out.print("|");
+                    System.out.print(updateDate);
+                    System.out.print("|");
+                    System.out.print(views);
+                    System.out.println("|");
+
+                }
+                System.out.println("------------+----------+----------+-----|");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+            System.exit(1);
+        }
+
+
     }
 
     public static void userPostManagement(Connection conn, Statement stmt){
