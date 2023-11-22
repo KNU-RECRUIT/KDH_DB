@@ -96,6 +96,29 @@ public class utils {
         return option;
     }
 
+    public static int queryOption4(int OS, Scanner sc){
+        boolean looptrigger = true;
+        int option = 0;
+        while(looptrigger){
+            utils.resetConsole(OS);
+            utils.title();
+            System.out.println("");
+            System.out.println("select option : ");
+            System.out.println("1. Search the user who posted the most and the least.");
+            System.out.println("2. Q2");
+            System.out.println("3. Q3");
+            System.out.println("4. exit program");
+            System.out.printf(">_ ");
+            option = sc.nextInt();
+            if(1<= option && option <= 4){
+                looptrigger = false;
+            }
+            else{
+                System.out.println("Wrong selection, input again");
+            }
+        }
+        return option;
+    }
     public static int menu(int OS, Scanner sc){
         boolean looptrigger = true;
         int menu = 0;

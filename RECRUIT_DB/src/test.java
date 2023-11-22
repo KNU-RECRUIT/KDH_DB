@@ -47,7 +47,7 @@ public class test {
             }
             case 3: {
                 System.out.println("user post management selected");
-                userPostManagement(conn, stmt);
+                userPostManagement(conn, stmt, sc);
                 break;
             }
             case 4: {
@@ -203,8 +203,62 @@ public class test {
 
     }
 
-    public static void userPostManagement(Connection conn, Statement stmt) {
+    public static void userPostManagement(Connection conn, Statement stmt, Scanner sc) {
         // System.out.println("userPostManagement works#");
+
+        int option = utils.queryOption4(OS, sc);
+        sc.nextLine(); // flsuh buffer
+        switch (option) {
+            case 1: {
+
+                try {
+                    System.out.println("Please select option: (min or max)");
+                    System.out.println("1. Max(Post Count)");
+                    System.out.println("2. Min(Post Count)");
+                    int minmaxopt = sc.nextInt();
+                    String minmaxqueryparam;
+
+                    if(minmaxopt==1)
+                    {
+                        minmaxqueryparam = "MAX";
+                    }
+                    else if(minmaxopt==2)
+                    {
+                        minmaxqueryparam = "MIN";
+                    }
+                    else{
+                        System.err.println("Wrong Option!");
+                        break;
+                    }
+                    String SQLF = "SELECT C.NAME AS CUSTOMER_NAME, U.AUTHOR_ID, COUNT(U.POST_ID) AS POST_COUNT FROM CUSTOMER_INFO C JOIN USER_POST_INFO U ON C.ID = U.AUTHOR_ID GROUP BY C.NAME, U.AUTHOR_ID HAVING COUNT(U.POST_ID) = (SELECT "+minmaxqueryparam+"(POST_COUNT) FROM (SELECT AUTHOR_ID, COUNT(POST_ID) AS POST_COUNT FROM USER_POST_INFO GROUP BY AUTHOR_ID))";
+
+                    stmt = conn.createStatement();
+                    rs = stmt.executeQuery(SQLF);
+                    System.out.printf("Customer Name| Author ID|Post Count|\n");
+                    System.out.println("=====================");
+                    while (rs.next()) {
+                        String CNAME = rs.getString(1);
+                        String AID = rs.getString(2);
+                        int PCNT = rs.getInt(3);
+
+
+                        System.out.print(CNAME);
+                        System.out.print("|");
+                        System.out.print(AID);
+                        System.out.print("|");
+                        System.out.print(PCNT);
+                        System.out.println("|");
+                        System.out.println("=====================");
+                    }
+                } catch (SQLException e) {
+                    System.out.println("Error: " + e.getMessage());
+                    System.exit(1);
+                }
+                break;
+            }
+
+
+        }
     }
 
     // set values based on OS
@@ -279,7 +333,7 @@ public class test {
 
         // Make a connection
         try {
-            conn = DriverManager.getConnection(URL, utils.RECRUIT, utils.worst);
+            conn = DriverManager.getConnection(URL, utils.UNIVERSITY, utils.COMP322);
             System.out.println("Oracle Connected.");
         } catch (SQLException se) {
             se.printStackTrace();
