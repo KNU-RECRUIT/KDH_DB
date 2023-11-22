@@ -22,6 +22,80 @@ public class utils {
         + "        \\/        \\/         \\/       \\/                        ");                 
     }
 
+    public static int queryOption1(int OS, Scanner sc){
+        boolean looptrigger = true;
+        int option = 0;
+        while(looptrigger){
+            utils.resetConsole(OS);
+            utils.title();
+            System.out.println("");
+            System.out.println("select option : ");
+            System.out.println("1. query1");
+            System.out.println("2. query2");
+            System.out.println("3. query3");
+            System.out.println("4. query4");
+            System.out.println("5. query5");
+            System.out.printf(">_ ");
+            option = sc.nextInt();
+            if(1<= option && option <= 5){
+                looptrigger = false;
+            }
+            else{
+                System.out.println("Wrong selection, input again");
+            }
+        }
+        return option;
+    }
+
+    public static int queryOption2(int OS, Scanner sc){
+        boolean looptrigger = true;
+        int option = 0;
+        while(looptrigger){
+            utils.resetConsole(OS);
+            utils.title();
+            System.out.println("");
+            System.out.println("select option : ");
+            System.out.println("1. Search whole announcements with selected ID");
+            System.out.println("2. Searching for posts made by employees at the department head level, based on certain conditions");
+            System.out.println("3. query3");
+            System.out.println("4. exit program");
+            System.out.printf(">_ ");
+            option = sc.nextInt();
+            if(1<= option && option <= 4){
+                looptrigger = false;
+            }
+            else{
+                System.out.println("Wrong selection, input again");
+            }
+        }
+        return option;
+    }
+
+    public static int queryOption3(int OS, Scanner sc){
+        boolean looptrigger = true;
+        int option = 0;
+        while(looptrigger){
+            utils.resetConsole(OS);
+            utils.title();
+            System.out.println("");
+            System.out.println("select option : ");
+            System.out.println("1. query1");
+            System.out.println("2. query2");
+            System.out.println("3. query3");
+            System.out.println("4. query4");
+            System.out.println("5. query5");
+            System.out.printf(">_ ");
+            option = sc.nextInt();
+            if(1<= option && option <= 5){
+                looptrigger = false;
+            }
+            else{
+                System.out.println("Wrong selection, input again");
+            }
+        }
+        return option;
+    }
+
     public static int menu(int OS, Scanner sc){
         boolean looptrigger = true;
         int menu = 0;
