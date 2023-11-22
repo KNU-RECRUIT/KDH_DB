@@ -57,7 +57,7 @@ public class utils {
             System.out.println("select option : ");
             System.out.println("1. Search whole announcements with selected ID");
             System.out.println("2. Searching for posts made by employees at the department head level, based on certain conditions");
-            System.out.println("3. query3");
+            System.out.println("3. Delete the announcement posts by POST_ID written by me.");
             System.out.println("4. exit program");
             System.out.printf(">_ ");
             option = sc.nextInt();

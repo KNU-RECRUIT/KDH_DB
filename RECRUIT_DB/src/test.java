@@ -138,7 +138,7 @@ public class test {
                 try {
                     stmt = conn.createStatement();
                     rs = stmt.executeQuery(SQL2);
-                        System.out.printf("%-4s|%-10s|%-4s|\n","이름", "전화번호(Phone)", "부서");
+                        System.out.printf("%-4s|%-10s|%-4s|\n","Name", "Phone", "Dept");
                         System.out.println("=========================");
 
                         while(rs.next())
@@ -163,6 +163,30 @@ public class test {
                 break;
             }
             case 3: {
+
+                System.out.println("Input the POST_ID you want to delete");
+                String a3_pid = sc.next();
+                String SQL4 = "DELETE FROM ANNOUNCEMENT_INFO WHERE MANAGER_ID='"+ID+"' AND POST_ID='"+a3_pid+"'";
+
+
+                try {
+                    stmt = conn.createStatement();
+                    int cnt = stmt.executeUpdate(SQL4);
+                    if(cnt>=1)
+                    {
+                        String dsql = "DELETE FROM POST_INFO WHERE POST_ID='"+a3_pid+"'";
+                        String dsql2 = "DELETE FROM USER_POST_INFO WHERE POST_ID='"+a3_pid+"'";
+                        stmt.executeUpdate(dsql);
+                        stmt.executeUpdate(dsql2);
+                    }
+
+                    System.out.println(cnt+" rows deleted.");
+                    System.out.println("=========================");
+                } catch (SQLException e) {
+                    System.out.println("Error: " + e.getMessage());
+                    System.exit(1);
+                }
+
                 break;
             }
             case 4: {
