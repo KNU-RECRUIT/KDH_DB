@@ -45,11 +45,13 @@ public class utils {
     }
 
     public static String setURL(int OS){
+        String name = "";
         if(OS == WIN){
-
+            name = "WIN";
         }
         else if(OS == UNIX){
-
+            name = "UNIX";
         }
+        return name;
     }
 }
